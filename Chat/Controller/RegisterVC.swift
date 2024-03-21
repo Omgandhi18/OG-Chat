@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class RegisterVC: UIViewController, UINavigationControllerDelegate {
 
@@ -17,6 +18,8 @@ class RegisterVC: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var txtConfirmPass: UITextField!
     @IBOutlet weak var btnAddProfilePic: UIButton!
     @IBOutlet weak var btnRegister: UIButton!
+    
+    private let spinner = JGProgressHUD(style: .dark)
     override func viewDidLoad() {
         super.viewDidLoad()
         imgProfile.makeViewCurve(radius: imgProfile.frame.size.height/2)
@@ -31,21 +34,46 @@ class RegisterVC: UIViewController, UINavigationControllerDelegate {
     }
     
     @IBAction func btnRegister(_ sender: Any) {
-        DatabaseManager.shared.userExists(with: txtEmail.text ?? "", completion: {exists in
+        //TODO: Insert validations
+        
+        spinner.show(in: view)
+        DatabaseManager.shared.userExists(with: txtEmail.text ?? "", completion: {[weak self] exists in
+            guard let strongSelf = self else {
+                return
+            }
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
+            }
             guard !exists else{
                 //TODO: Insert Alert 
                 print("user already exists")
                 return
             }
-            FirebaseAuth.Auth.auth().createUser(withEmail: self.txtEmail.text ?? "", password: self.txtPass.text ?? "",completion: {[weak self] authResult, error in
-                guard let strongSelf = self else{
-                    return
-                }
-                guard let result = authResult, error == nil else{
+            FirebaseAuth.Auth.auth().createUser(withEmail: strongSelf.txtEmail.text ?? "", password: strongSelf.txtPass.text ?? "",completion: {authResult, error in
+                guard  authResult != nil, error == nil else{
                     print("Error creating user")
                     return
                 }
-                DatabaseManager.shared.insertUser(with: ChatAppUser(name: self?.txtName.text ?? "", email: self?.txtEmail.text ?? "", profilePicUrl: ""))
+                let chatUser = ChatAppUser(name: self?.txtName.text ?? "", email: self?.txtEmail.text ?? "", profilePicUrl: "")
+                DatabaseManager.shared.insertUser(with: chatUser, completion: {success in
+                    if success
+                    {
+                        guard let image = strongSelf.imgProfile.image,let data = image.pngData() else{
+                            return
+                        }
+                        let fileName = chatUser.profilePicFileName
+                        StorageManager.shared.uploadProfilePic(with: data, fileName: fileName, completion: {result in
+                            switch (result)
+                            {
+                            case .success(let downloadUrl):
+                                UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
+                                print(downloadUrl)
+                            case .failure(let error):
+                                print("Storage Manager error \(error)")
+                            }
+                        })
+                    }
+                })
                 strongSelf.navigationController?.dismiss(animated: true)
             })
         })

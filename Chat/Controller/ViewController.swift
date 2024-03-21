@@ -7,11 +7,19 @@
 
 import UIKit
 import FirebaseAuth
-class ViewController: UIViewController {
+import JGProgressHUD
+class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSource{
     
+    
+    
+    @IBOutlet weak var tblChats: UITableView!
+    
+    private let spinner = JGProgressHUD(style: .dark)
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        tblChats.delegate = self
+        tblChats.dataSource = self
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -29,5 +37,32 @@ class ViewController: UIViewController {
             nav.modalPresentationStyle = .fullScreen
             present(nav, animated: false)
         }
+    }
+    func fetchChats(){
+        
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.selectionStyle = .none
+        cell.textLabel?.text = "Hello World"
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
+        vc.title = "Jenny Smith"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @IBAction func btnNewChat(_ sender: Any) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "newChatStory") as! NewChatVC
+        let navVC = UINavigationController(rootViewController: vc)
+        present(navVC, animated: true)
+        
+        
     }
 }

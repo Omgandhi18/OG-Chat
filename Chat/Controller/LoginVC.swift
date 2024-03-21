@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class LoginVC: UIViewController {
 //MARK: Outlets
@@ -14,6 +15,8 @@ class LoginVC: UIViewController {
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var txtPass: UITextField!
     @IBOutlet weak var btnLogin: UIButton!
+    
+    private let spinner = JGProgressHUD(style: .dark)
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,9 +24,13 @@ class LoginVC: UIViewController {
     }
     
     @IBAction func btnLogin(_ sender: Any) {
+        spinner.show(in: view)
         FirebaseAuth.Auth.auth().signIn(withEmail: txtEmail.text ?? "", password: txtPass.text ?? "",completion: {[weak self] authResult,error in
             guard let strongSelf = self else{
                 return
+            }
+            DispatchQueue.main.async {
+                strongSelf.spinner.dismiss()
             }
             guard let result = authResult, error == nil else{
                 print("Failed to log in")

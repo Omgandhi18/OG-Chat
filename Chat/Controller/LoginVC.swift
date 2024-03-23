@@ -25,6 +25,8 @@ class LoginVC: UIViewController {
     
     @IBAction func btnLogin(_ sender: Any) {
         spinner.show(in: view)
+        //TODO: Insert validations
+        
         FirebaseAuth.Auth.auth().signIn(withEmail: txtEmail.text ?? "", password: txtPass.text ?? "",completion: {[weak self] authResult,error in
             guard let strongSelf = self else{
                 return
@@ -37,6 +39,7 @@ class LoginVC: UIViewController {
                 return
             }
             let user = result.user
+            UserDefaults.standard.set(strongSelf.txtEmail.text ?? "", forKey: "email")
             print("Logged In \(user)")
             strongSelf.navigationController?.dismiss(animated: true)
         })

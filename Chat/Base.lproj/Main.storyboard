@@ -139,8 +139,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rvc-WH-1D5">
-                                <rect key="frame" x="0.0" y="116" width="375" height="502"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="iAO-UG-rsk">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="127"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3Pb-IL-VGq">
+                                            <rect key="frame" x="8" y="8" width="100" height="111"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="rPa-Gd-9hZ"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kMf-PJ-BaP">
+                                            <rect key="frame" x="116" y="8" width="251" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstItem="3Pb-IL-VGq" firstAttribute="leading" secondItem="iAO-UG-rsk" secondAttribute="leading" constant="8" id="BCl-dR-KdJ"/>
+                                        <constraint firstItem="kMf-PJ-BaP" firstAttribute="leading" secondItem="3Pb-IL-VGq" secondAttribute="trailing" constant="8" id="Ffm-CU-YoD"/>
+                                        <constraint firstItem="3Pb-IL-VGq" firstAttribute="top" secondItem="iAO-UG-rsk" secondAttribute="top" constant="8" id="PWb-nd-tbJ"/>
+                                        <constraint firstItem="kMf-PJ-BaP" firstAttribute="top" secondItem="iAO-UG-rsk" secondAttribute="top" constant="8" id="QjQ-fS-lsG"/>
+                                        <constraint firstAttribute="bottom" secondItem="3Pb-IL-VGq" secondAttribute="bottom" constant="8" id="SFp-cg-mFc"/>
+                                        <constraint firstAttribute="trailing" secondItem="kMf-PJ-BaP" secondAttribute="trailing" constant="8" id="TWX-QR-pE3"/>
+                                    </constraints>
+                                </view>
                                 <connections>
                                     <outlet property="dataSource" destination="e8o-XK-12A" id="0hv-bs-EEM"/>
                                     <outlet property="delegate" destination="e8o-XK-12A" id="k0d-ST-LQ3"/>
@@ -158,6 +185,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="Q7b-9v-Jgz"/>
                     <connections>
+                        <outlet property="headerTblView" destination="iAO-UG-rsk" id="nNV-c8-OcB"/>
+                        <outlet property="imgProfile" destination="3Pb-IL-VGq" id="Y3A-3k-F0l"/>
+                        <outlet property="lblEmail" destination="kMf-PJ-BaP" id="23j-WV-xYd"/>
                         <outlet property="tblOptions" destination="rvc-WH-1D5" id="rDV-ts-QUZ"/>
                     </connections>
                 </viewController>

@@ -74,6 +74,7 @@ class RegisterVC: UIViewController, UINavigationControllerDelegate {
                         })
                     }
                 })
+                UserDefaults.standard.set(strongSelf.txtEmail.text ?? "", forKey: "email")
                 strongSelf.navigationController?.dismiss(animated: true)
             })
         })

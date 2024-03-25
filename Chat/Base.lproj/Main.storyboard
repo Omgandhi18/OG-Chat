@@ -21,13 +21,56 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="65" id="y6n-zU-mGm">
-                                        <rect key="frame" x="0.0" y="50" width="375" height="65"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="81" id="y6n-zU-mGm" customClass="ConversationsCell" customModule="Chat" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="375" height="81"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="y6n-zU-mGm" id="dlV-xh-HSI">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="81"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yCq-6I-KVn">
+                                                    <rect key="frame" x="16" y="16" width="40" height="49"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="VmE-xh-Sq0"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mr4-V7-Skg">
+                                                    <rect key="frame" x="72" y="16" width="287" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="xTg-Oe-Xsb"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pb3-Yh-mXT">
+                                                    <rect key="frame" x="72" y="49" width="287" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="ors-pb-2Ez"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Pb3-Yh-mXT" firstAttribute="top" secondItem="mr4-V7-Skg" secondAttribute="bottom" constant="8" id="1hP-Dw-6Iz"/>
+                                                <constraint firstAttribute="bottom" secondItem="yCq-6I-KVn" secondAttribute="bottom" constant="16" id="1tl-jB-Ulo"/>
+                                                <constraint firstItem="yCq-6I-KVn" firstAttribute="top" secondItem="dlV-xh-HSI" secondAttribute="top" constant="16" id="9Vt-aW-BVK"/>
+                                                <constraint firstAttribute="trailing" secondItem="mr4-V7-Skg" secondAttribute="trailing" constant="16" id="A57-so-M15"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Pb3-Yh-mXT" secondAttribute="bottom" constant="16" id="O5S-cn-mKH"/>
+                                                <constraint firstAttribute="trailing" secondItem="Pb3-Yh-mXT" secondAttribute="trailing" constant="16" id="Saz-Rk-YNA"/>
+                                                <constraint firstItem="yCq-6I-KVn" firstAttribute="leading" secondItem="dlV-xh-HSI" secondAttribute="leading" constant="16" id="U10-JP-CED"/>
+                                                <constraint firstItem="mr4-V7-Skg" firstAttribute="leading" secondItem="yCq-6I-KVn" secondAttribute="trailing" constant="16" id="dTz-7V-jpI"/>
+                                                <constraint firstItem="mr4-V7-Skg" firstAttribute="top" secondItem="dlV-xh-HSI" secondAttribute="top" constant="16" id="iGA-F3-7R0"/>
+                                                <constraint firstItem="Pb3-Yh-mXT" firstAttribute="leading" secondItem="yCq-6I-KVn" secondAttribute="trailing" constant="16" id="yuD-yt-wOm"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="imgUser" destination="yCq-6I-KVn" id="2xI-Yp-P4T"/>
+                                            <outlet property="lblMsg" destination="Pb3-Yh-mXT" id="yic-fx-VqU"/>
+                                            <outlet property="lblName" destination="mr4-V7-Skg" id="8PY-L3-BFP"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -43,7 +86,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Chats" id="sSX-AT-B8E">
                         <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="ALW-Y4-aay">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KwA-Q5-Ws9">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KwA-Q5-Ws9">
                                 <rect key="frame" x="332" y="9" width="27" height="26.5"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>

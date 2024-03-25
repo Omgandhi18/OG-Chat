@@ -14,6 +14,7 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
     private var users = [[String:String]]()
     private var results = [[String:String]]()
     private var hasFetched = false
+    public var completion: (([String: String]) -> (Void))?
     @IBOutlet weak var tblUsers: UITableView!
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -42,6 +43,11 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let targetUserData = results[indexPath.row]
+        dismiss(animated: true,completion: {[weak self] in
+            self?.completion?(targetUserData)
+        })
+        
         
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

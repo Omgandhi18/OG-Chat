@@ -15,6 +15,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     @IBOutlet weak var tblChats: UITableView!
     
     private let spinner = JGProgressHUD(style: .dark)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -60,9 +61,23 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     
     @IBAction func btnNewChat(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "newChatStory") as! NewChatVC
+        vc.completion = {[weak self] result in
+            self?.createNewConversation(result: result)
+        }
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
+    
+    }
+    private func createNewConversation(result: [String:String]){
         
-        
+        guard let email = result["email"] else{
+            return
+        }
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
+        vc.title = result["name"]
+        vc.otherUserEmail = email
+        vc.isNewCoversation = true
+        vc.navigationItem.largeTitleDisplayMode = .never
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

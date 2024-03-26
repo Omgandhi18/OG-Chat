@@ -101,6 +101,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
         let model = conversations[indexPath.row]
         vc.title = model.name

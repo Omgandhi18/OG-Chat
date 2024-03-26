@@ -173,6 +173,35 @@
             </objects>
             <point key="canvasLocation" x="-111" y="2396"/>
         </scene>
+        <!--Photo View Controller-->
+        <scene sceneID="VrJ-bF-5Dd">
+            <objects>
+                <viewController storyboardIdentifier="photoViewStory" hidesBottomBarWhenPushed="YES" id="902-CM-iBI" customClass="PhotoViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DTl-xz-kYc">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kkd-CJ-XmV">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cDI-tV-khi"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="cDI-tV-khi" firstAttribute="bottom" secondItem="kkd-CJ-XmV" secondAttribute="bottom" id="3fN-Pi-xrk"/>
+                            <constraint firstItem="kkd-CJ-XmV" firstAttribute="top" secondItem="cDI-tV-khi" secondAttribute="top" id="JLy-xg-zPS"/>
+                            <constraint firstItem="kkd-CJ-XmV" firstAttribute="leading" secondItem="cDI-tV-khi" secondAttribute="leading" id="NKw-ft-4Qc"/>
+                            <constraint firstItem="cDI-tV-khi" firstAttribute="trailing" secondItem="kkd-CJ-XmV" secondAttribute="trailing" id="ewp-xh-dlq"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imgView" destination="kkd-CJ-XmV" id="dzv-Q9-6cy"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H4m-9Q-6fW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1082" y="3104"/>
+        </scene>
         <!--Profile-->
         <scene sceneID="MfW-OX-bz7">
             <objects>

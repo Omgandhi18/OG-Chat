@@ -17,10 +17,21 @@ class LoginVC: UIViewController {
     @IBOutlet weak var btnLogin: UIButton!
     
     private let spinner = JGProgressHUD(style: .dark)
+    private var loginObserver: NSObjectProtocol?
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLoginNotification, object: nil, queue: .main, using: {[weak self]_ in
+            guard let strongSelf = self else{
+                return
+            }
+            strongSelf.navigationController?.dismiss(animated: true)
+        })
+        
+    }
+    deinit{
+        if let observer = loginObserver{
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     @IBAction func btnLogin(_ sender: Any) {
@@ -55,6 +66,7 @@ class LoginVC: UIViewController {
             UserDefaults.standard.set(strongSelf.txtEmail.text ?? "", forKey: "email")
             
             print("Logged In \(user)")
+            NotificationCenter.default.post(name: .didLoginNotification, object: nil)
             strongSelf.navigationController?.dismiss(animated: true)
         })
     }
@@ -63,4 +75,7 @@ class LoginVC: UIViewController {
         let vc = self.storyboard?.instantiateViewController(identifier: "registerStory") as! RegisterVC
         self.navigationController?.pushViewController(vc, animated: true)
     }
+}
+extension Notification.Name{
+    static let didLoginNotification = Notification.Name("didLogInNotification")
 }

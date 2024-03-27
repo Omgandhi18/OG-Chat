@@ -28,24 +28,33 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     
     private let spinner = JGProgressHUD(style: .dark)
     private var conversations = [Conversations]()
-    
+    private var loginObserver: NSObjectProtocol?
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         tblChats.delegate = self
         tblChats.dataSource = self
-        startListeningforConversation()
+        loginObserver = NotificationCenter.default.addObserver(forName: .didLoginNotification, object: nil, queue: .main, using: {[weak self]_ in
+            guard let strongSelf = self else{
+                return
+            }
+            strongSelf.startListeningforConversation()
+        })
+
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         validateAuth()
-        
+        startListeningforConversation()
         
         
     }
     private func startListeningforConversation(){
         guard let email = UserDefaults.standard.string(forKey: "email") else{
             return
+        }
+        if let observer = loginObserver{
+            NotificationCenter.default.removeObserver(observer)
         }
         let safeEmail = DatabaseManager.safeEmail(email: email)
     
@@ -102,8 +111,12 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
         let model = conversations[indexPath.row]
+        openConversation(model)
+        
+    }
+    func openConversation(_ model: Conversations){
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
         vc.title = model.name
         vc.otherUserEmail = model.otherUserEmail
         vc.conversationID = model.id
@@ -113,26 +126,73 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            let conversationId = conversations[indexPath.row].id
+            tableView.beginUpdates()
+            DatabaseManager.shared.deleteConversation(conversationID: conversationId , completion: {[weak self]success in
+                if success{
+                    self?.conversations.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .left)
+                }
+                
+                    
+            })
+            
+            tableView.endUpdates()
+        }
+    }
     
     @IBAction func btnNewChat(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "newChatStory") as! NewChatVC
         vc.completion = {[weak self] result in
-            self?.createNewConversation(result: result)
+            guard let strongSelf = self else{
+                return
+            }
+            let currentConversations = strongSelf.conversations
+            if let targetConversation = currentConversations.first(where: {
+                $0.otherUserEmail == DatabaseManager.safeEmail(email: result.email)
+            }){
+                strongSelf.openConversation(targetConversation)
+            }
+            else{
+                self?.createNewConversation(result: result)
+            }
+            
         }
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
     
     }
-    private func createNewConversation(result: [String:String]){
+    private func createNewConversation(result: SearchResults){
+        let name = result.name
+        let email = DatabaseManager.safeEmail(email: result.email)
         
-        guard let email = result["email"] else{
-            return
-        }
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
-        vc.title = result["name"]
-        vc.otherUserEmail = email
-        vc.isNewCoversation = true
-        vc.navigationItem.largeTitleDisplayMode = .never
-        self.navigationController?.pushViewController(vc, animated: true)
+        DatabaseManager.shared.conversationExists(with: email, completion: {[weak self] result in
+            guard let strongSelf = self else{
+                return
+            }
+            switch result{
+            case .success(let conversationID):
+                let vc = self?.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
+                vc.title = name
+                vc.conversationID = conversationID
+                vc.otherUserEmail = email
+                vc.isNewCoversation = false
+                vc.navigationItem.largeTitleDisplayMode = .never
+                strongSelf.navigationController?.pushViewController(vc, animated: true)
+            case .failure(_):
+                let vc = self?.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
+                vc.title = name
+                vc.otherUserEmail = email
+                vc.isNewCoversation = true
+                vc.navigationItem.largeTitleDisplayMode = .never
+                strongSelf.navigationController?.pushViewController(vc, animated: true)
+            }
+        })
+        
     }
 }

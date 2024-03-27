@@ -11,8 +11,11 @@
 		A4D11AA47BF88A674553B982 /* Pods_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EADB3F8BF0AB52856CAD8084 /* Pods_Chat.framework */; };
 		A6AE81505100AFB0C5F0CC92 /* Pods_ChatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6436ABF850BA5A8E7BB3924B /* Pods_ChatTests.framework */; };
 		C00084472BAC46C0007ECB71 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00084462BAC46C0007ECB71 /* ChatViewController.swift */; };
+		C036D1F62BB45C3900696380 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C036D1F52BB45C3900696380 /* LocationPickerViewController.swift */; };
+		C036D1F82BB467FE00696380 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C036D1F72BB467FE00696380 /* LocationViewController.swift */; };
 		C049F6392BAC53A4006BB406 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C049F6382BAC53A4006BB406 /* StorageManager.swift */; };
 		C04C54972BB2EAA200904121 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04C54962BB2EAA200904121 /* PhotoViewController.swift */; };
+		C04C54992BB30DFD00904121 /* NewConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04C54982BB30DFD00904121 /* NewConversationCell.swift */; };
 		C05784752BB1BEAF00D25C01 /* ConversationsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05784742BB1BEAF00D25C01 /* ConversationsCell.swift */; };
 		C093772E2BAB4FDE00DD53FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C093772D2BAB4FDE00DD53FB /* AppDelegate.swift */; };
 		C09377302BAB4FDE00DD53FB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C093772F2BAB4FDE00DD53FB /* SceneDelegate.swift */; };
@@ -60,8 +63,11 @@
 		6436ABF850BA5A8E7BB3924B /* Pods_ChatTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChatTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72BDC988B8419623C9F66751 /* Pods-Chat-ChatUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat-ChatUITests.debug.xcconfig"; path = "Target Support Files/Pods-Chat-ChatUITests/Pods-Chat-ChatUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		C00084462BAC46C0007ECB71 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		C036D1F52BB45C3900696380 /* LocationPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerViewController.swift; sourceTree = "<group>"; };
+		C036D1F72BB467FE00696380 /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		C049F6382BAC53A4006BB406 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		C04C54962BB2EAA200904121 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		C04C54982BB30DFD00904121 /* NewConversationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationCell.swift; sourceTree = "<group>"; };
 		C05784742BB1BEAF00D25C01 /* ConversationsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsCell.swift; sourceTree = "<group>"; };
 		C093772A2BAB4FDE00DD53FB /* Chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C093772D2BAB4FDE00DD53FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				C05784742BB1BEAF00D25C01 /* ConversationsCell.swift */,
+				C04C54982BB30DFD00904121 /* NewConversationCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -217,6 +224,8 @@
 				C00084462BAC46C0007ECB71 /* ChatViewController.swift */,
 				C0D2E2802BAC4CC900346738 /* NewChatVC.swift */,
 				C04C54962BB2EAA200904121 /* PhotoViewController.swift */,
+				C036D1F52BB45C3900696380 /* LocationPickerViewController.swift */,
+				C036D1F72BB467FE00696380 /* LocationViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -482,11 +491,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C09377692BAB6FC500DD53FB /* WebService.swift in Sources */,
+				C036D1F62BB45C3900696380 /* LocationPickerViewController.swift in Sources */,
 				C09377662BAB6FC500DD53FB /* Settings.swift in Sources */,
 				C0B88F2E2BAB7A110046B771 /* DatabaseManager.swift in Sources */,
 				C049F6392BAC53A4006BB406 /* StorageManager.swift in Sources */,
 				C09377672BAB6FC500DD53FB /* HelperClass.swift in Sources */,
 				C0D2E2812BAC4CC900346738 /* NewChatVC.swift in Sources */,
+				C036D1F82BB467FE00696380 /* LocationViewController.swift in Sources */,
 				C09377682BAB6FC500DD53FB /* LocalStateCheck.swift in Sources */,
 				C09377322BAB4FDE00DD53FB /* ViewController.swift in Sources */,
 				C05784752BB1BEAF00D25C01 /* ConversationsCell.swift in Sources */,
@@ -497,6 +508,7 @@
 				C04C54972BB2EAA200904121 /* PhotoViewController.swift in Sources */,
 				C00084472BAC46C0007ECB71 /* ChatViewController.swift in Sources */,
 				C09377612BAB65A800DD53FB /* RegisterVC.swift in Sources */,
+				C04C54992BB30DFD00904121 /* NewConversationCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

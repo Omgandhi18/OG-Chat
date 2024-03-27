@@ -7,14 +7,14 @@
 
 import UIKit
 import JGProgressHUD
-
+import SDWebImage
 class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UISearchBarDelegate{
     
     private let spinner = JGProgressHUD(style: .dark)
     private var users = [[String:String]]()
-    private var results = [[String:String]]()
+    private var results = [SearchResults]()
     private var hasFetched = false
-    public var completion: (([String: String]) -> (Void))?
+    public var completion: ((SearchResults) -> (Void))?
     @IBOutlet weak var tblUsers: UITableView!
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -36,9 +36,22 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "newConvoCell", for: indexPath) as! NewConversationCell
+        let users = results[indexPath.row]
+        cell.lblName.text = users.name
         cell.selectionStyle = .none
-        cell.textLabel?.text = results[indexPath.row]["name"]
+        let path = "images/\(users.email)_profile_picture.png"
+        StorageManager.shared.downloadURL(for: path, completion: {result in
+            switch result{
+            case .success(let url):
+                DispatchQueue.main.async {
+                    cell.imgUser.sd_setImage(with: url)
+                }
+                
+            case .failure(let error):
+                print("Failed to get download URL: \(error)")
+            }
+        })
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -77,15 +90,27 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
         }
     }
     func filterUsers(with term: String){
-        guard hasFetched else{
+        guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String, hasFetched else{
             return
         }
+        let safeEmail = DatabaseManager.safeEmail(email: currentUserEmail)
+        
         self.spinner.dismiss()
-        let results: [[String:String]] = self.users.filter({
+        let results: [SearchResults] = self.users.filter({
+            guard let email = $0["email"],
+                  email != safeEmail else{
+                return false
+            }
+            
             guard let name = $0["name"]?.lowercased() as? String else{
             return false
              }
             return name.hasPrefix(term.lowercased())
+        }).compactMap({
+            guard let email = $0["email"], let name = $0["name"] else{
+            return nil
+             }
+            return SearchResults(name: name, email: email)
         })
         self.results = results
         updateUI()
@@ -99,5 +124,10 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
             tblUsers.reloadData()
         }
     }
+    
+}
+struct SearchResults {
+    let name: String
+    let email: String
     
 }

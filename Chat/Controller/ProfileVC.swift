@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import SDWebImage
 class ProfileVC: UIViewController, UITableViewDelegate,UITableViewDataSource{
    
     
@@ -15,40 +16,35 @@ class ProfileVC: UIViewController, UITableViewDelegate,UITableViewDataSource{
     @IBOutlet weak var headerTblView: UIView!
     @IBOutlet weak var imgProfile: UIImageView!
     @IBOutlet weak var lblEmail: UILabel!
+    @IBOutlet weak var lblName: UILabel!
     
     var data = ["Log Out"]
     override func viewDidLoad() {
         super.viewDidLoad()
         tblOptions.register(UITableViewCell.self,forCellReuseIdentifier: "cell")
-        createTableHeader()
+       
        
         // Do any additional setup after loading the view.
     }
+    override func viewDidAppear(_ animated: Bool) {
+        createTableHeader()
+    }
     func createTableHeader(){
         //TODO: Customize the header
-        guard let email = UserDefaults.standard.value(forKey: "email") as? String else{
+        guard let email = UserDefaults.standard.value(forKey: "email") as? String, let name =  UserDefaults.standard.value(forKey: "name") as? String else{
             return
         }
         lblEmail.text = email
+        lblName.text = name
         let safeEmail = DatabaseManager.safeEmail(email: email)
 
         let fileAddress = safeEmail + "_profile_picture.png"
         let path = "images/"+fileAddress
         
-        StorageManager.shared.downloadURL(for: path, completion: {result in
+        StorageManager.shared.downloadURL(for: path, completion: {[weak self]result in
             switch result{
             case .success(let url):
-                URLSession.shared.dataTask(with: url,completionHandler: {data,_,error in
-                    guard let data = data, error == nil else{
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        let image = UIImage(data: data)
-                        self.imgProfile.image = image
-                    }
-                }).resume()
-                
-            
+                self?.imgProfile.sd_setImage(with: url)
             case .failure(let error):
                 print("Failed to get download URL: \(error)")
             }

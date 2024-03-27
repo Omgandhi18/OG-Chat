@@ -165,6 +165,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         }
         let navVC = UINavigationController(rootViewController: vc)
         present(navVC, animated: true)
+         
     
     }
     private func createNewConversation(result: SearchResults){

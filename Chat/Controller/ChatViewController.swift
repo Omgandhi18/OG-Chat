@@ -64,6 +64,8 @@ struct Location: LocationItem{
 }
 class ChatViewController: MessagesViewController, MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate, InputBarAccessoryViewDelegate {
     
+    private var senderPhotoUrl: URL?
+    private var otherUserPhotoUrl: URL?
     
     public static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -361,6 +363,56 @@ extension ChatViewController: MessageCellDelegate{
             present(vc, animated: true)
         default: break
         }
+    }
+    func configureAvatarView(_ avatarView: AvatarView, for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        let sender = message.sender
+        if sender.senderId == selfSender?.senderId{
+            if let currentUserImageUrl = self.senderPhotoUrl{
+                avatarView.sd_setImage(with: currentUserImageUrl)
+            }
+            else{
+                guard let email = UserDefaults.standard.string(forKey: "email") else{
+                    return
+                }
+                let safeEmail = DatabaseManager.safeEmail(email: email)
+                let path = "images/\(safeEmail)_profile_picture.png"
+                StorageManager.shared.downloadURL(for: path, completion: {[weak self]result in
+                    switch result{
+                        
+                    case .success(let url):
+                        self?.senderPhotoUrl = url
+                        DispatchQueue.main.async {
+                            avatarView.sd_setImage(with: url)
+                        }
+                    case .failure(let error):
+                        print("\(error)")
+                    }
+                })
+            }
+        }
+        else{
+            if let otherUserPhotoUrl = self.otherUserPhotoUrl{
+                avatarView.sd_setImage(with: otherUserPhotoUrl)
+            }
+            else{
+                let email = self.otherUserEmail
+                let safeEmail = DatabaseManager.safeEmail(email: email)
+                let path = "images/\(safeEmail)_profile_picture.png"
+                StorageManager.shared.downloadURL(for: path, completion: {[weak self]result in
+                    switch result{
+                        
+                    case .success(let url):
+                        self?.otherUserPhotoUrl = url
+                        DispatchQueue.main.async {
+                            avatarView.sd_setImage(with: url)
+                        }
+                    case .failure(let error):
+                        print("\(error)")
+                    }
+                })
+            }
+        }
+        
     }
 }
 extension ChatViewController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{

@@ -65,6 +65,8 @@ class ProfileVC: UIViewController, UITableViewDelegate,UITableViewDataSource{
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        UserDefaults.standard.set(nil, forKey: "email")
+        UserDefaults.standard.set(nil, forKey: "name")
         do{
             try FirebaseAuth.Auth.auth().signOut()
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "loginStory") as! LoginVC

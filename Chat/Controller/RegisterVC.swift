@@ -54,6 +54,8 @@ class RegisterVC: UIViewController, UINavigationControllerDelegate {
                     print("Error creating user")
                     return
                 }
+                UserDefaults.standard.set(strongSelf.txtEmail.text, forKey: "email")
+                UserDefaults.standard.set(strongSelf.txtEmail.text, forKey: "name")
                 let chatUser = ChatAppUser(name: self?.txtName.text ?? "", email: self?.txtEmail.text ?? "", profilePicUrl: "")
                 DatabaseManager.shared.insertUser(with: chatUser, completion: {success in
                     if success

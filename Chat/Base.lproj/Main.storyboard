@@ -233,7 +233,7 @@
         <!--Location Picker View Controller-->
         <scene sceneID="LVp-ft-Wno">
             <objects>
-                <viewController storyboardIdentifier="locationPickerStory" id="RdQ-d2-wLM" customClass="LocationPickerViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="locationPickerStory" hidesBottomBarWhenPushed="YES" id="RdQ-d2-wLM" customClass="LocationPickerViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hqu-IP-r7T">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -263,7 +263,7 @@
         <!--Location View Controller-->
         <scene sceneID="SEf-HE-wZH">
             <objects>
-                <viewController storyboardIdentifier="locationViewStory" id="oZ6-9I-sNp" customClass="LocationViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="locationViewStory" hidesBottomBarWhenPushed="YES" id="oZ6-9I-sNp" customClass="LocationViewController" customModule="Chat" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ydt-wu-aFk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

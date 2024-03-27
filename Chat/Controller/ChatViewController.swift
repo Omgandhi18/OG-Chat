@@ -323,6 +323,15 @@ class ChatViewController: MessagesViewController, MessagesDataSource, MessagesLa
 
 }
 extension ChatViewController: MessageCellDelegate{
+    func messageStyle(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+        let sender = message.sender
+        if sender.senderId == selfSender?.senderId{
+            return .bubbleTail(.bottomRight, .curved)
+        }
+        else{
+            return .bubbleTail(.bottomLeft, .curved)
+        }
+    }
     func didTapMessage(in cell: MessageCollectionViewCell) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell) else{
             return

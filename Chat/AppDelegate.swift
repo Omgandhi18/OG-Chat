@@ -15,19 +15,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()
-        if !UserDefaults.standard.bool(forKey: "firstLaunch"){
-            [kSecClassGenericPassword, kSecClassInternetPassword, kSecClassCertificate, kSecClassKey, kSecClassIdentity].forEach {
-                    let status = SecItemDelete([
-                      kSecClass: $0,
-                      kSecAttrSynchronizable: kSecAttrSynchronizableAny
-                    ] as CFDictionary)
-                    if status != errSecSuccess && status != errSecItemNotFound {
-                        //Error while removing class $0
-                    }
-                  }
-            UserDefaults.standard.set(true, forKey: "firstLaunch")
-            UserDefaults.standard.synchronize()
+        DispatchQueue.global().async {
+            if !UserDefaults.standard.bool(forKey: "firstLaunch"){
+                [kSecClassGenericPassword, kSecClassInternetPassword, kSecClassCertificate, kSecClassKey, kSecClassIdentity].forEach {
+                        let status = SecItemDelete([
+                          kSecClass: $0,
+                          kSecAttrSynchronizable: kSecAttrSynchronizableAny
+                        ] as CFDictionary)
+                        if status != errSecSuccess && status != errSecItemNotFound {
+                            //Error while removing class $0
+                        }
+                      }
+                UserDefaults.standard.set(true, forKey: "firstLaunch")
+                UserDefaults.standard.synchronize()
+            }
         }
+        
         return true
     }
 

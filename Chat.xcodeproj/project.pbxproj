@@ -35,6 +35,10 @@
 		C0B03CCF2BAC3D6200A2E77F /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B03CCE2BAC3D6200A2E77F /* ProfileVC.swift */; };
 		C0B88F2E2BAB7A110046B771 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B88F2D2BAB7A110046B771 /* DatabaseManager.swift */; };
 		C0B88F302BAB7B7B0046B771 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0B88F2F2BAB7B7B0046B771 /* GoogleService-Info.plist */; };
+		C0CD62B92BB5CE7C00F22D78 /* StartupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CD62B82BB5CE7C00F22D78 /* StartupViewController.swift */; };
+		C0CD62BC2BB5D36C00F22D78 /* LogoGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = C0CD62BA2BB5D36C00F22D78 /* LogoGif.gif */; };
+		C0CD62BD2BB5D36C00F22D78 /* logoLightGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = C0CD62BB2BB5D36C00F22D78 /* logoLightGif.gif */; };
+		C0CD62BF2BB5D3D700F22D78 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CD62BE2BB5D3D700F22D78 /* TabBarController.swift */; };
 		C0D2E2812BAC4CC900346738 /* NewChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D2E2802BAC4CC900346738 /* NewChatVC.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +95,10 @@
 		C0B03CCE2BAC3D6200A2E77F /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		C0B88F2D2BAB7A110046B771 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		C0B88F2F2BAB7B7B0046B771 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C0CD62B82BB5CE7C00F22D78 /* StartupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupViewController.swift; sourceTree = "<group>"; };
+		C0CD62BA2BB5D36C00F22D78 /* LogoGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = LogoGif.gif; sourceTree = "<group>"; };
+		C0CD62BB2BB5D36C00F22D78 /* logoLightGif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = logoLightGif.gif; sourceTree = "<group>"; };
+		C0CD62BE2BB5D3D700F22D78 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		C0D2E2802BAC4CC900346738 /* NewChatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatVC.swift; sourceTree = "<group>"; };
 		C32827BA7C827ECBE1A314D2 /* Pods-Chat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chat.release.xcconfig"; path = "Target Support Files/Pods-Chat/Pods-Chat.release.xcconfig"; sourceTree = "<group>"; };
 		EADB3F8BF0AB52856CAD8084 /* Pods_Chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +190,8 @@
 		C093772C2BAB4FDE00DD53FB /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				C0CD62BA2BB5D36C00F22D78 /* LogoGif.gif */,
+				C0CD62BB2BB5D36C00F22D78 /* logoLightGif.gif */,
 				C05784732BB1BE9100D25C01 /* Views */,
 				C0B03CCD2BAC3D4700A2E77F /* Imp Classes */,
 				C0B88F2F2BAB7B7B0046B771 /* GoogleService-Info.plist */,
@@ -226,6 +236,8 @@
 				C04C54962BB2EAA200904121 /* PhotoViewController.swift */,
 				C036D1F52BB45C3900696380 /* LocationPickerViewController.swift */,
 				C036D1F72BB467FE00696380 /* LocationViewController.swift */,
+				C0CD62B82BB5CE7C00F22D78 /* StartupViewController.swift */,
+				C0CD62BE2BB5D3D700F22D78 /* TabBarController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -363,7 +375,9 @@
 				C09377372BAB4FDF00DD53FB /* Assets.xcassets in Resources */,
 				C0B88F302BAB7B7B0046B771 /* GoogleService-Info.plist in Resources */,
 				C093773A2BAB4FDF00DD53FB /* Base in Resources */,
+				C0CD62BC2BB5D36C00F22D78 /* LogoGif.gif in Resources */,
 				C09377352BAB4FDE00DD53FB /* Base in Resources */,
+				C0CD62BD2BB5D36C00F22D78 /* logoLightGif.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,6 +531,7 @@
 				C036D1F62BB45C3900696380 /* LocationPickerViewController.swift in Sources */,
 				C09377662BAB6FC500DD53FB /* Settings.swift in Sources */,
 				C0B88F2E2BAB7A110046B771 /* DatabaseManager.swift in Sources */,
+				C0CD62B92BB5CE7C00F22D78 /* StartupViewController.swift in Sources */,
 				C049F6392BAC53A4006BB406 /* StorageManager.swift in Sources */,
 				C09377672BAB6FC500DD53FB /* HelperClass.swift in Sources */,
 				C0D2E2812BAC4CC900346738 /* NewChatVC.swift in Sources */,
@@ -530,6 +545,7 @@
 				C0B03CCF2BAC3D6200A2E77F /* ProfileVC.swift in Sources */,
 				C04C54972BB2EAA200904121 /* PhotoViewController.swift in Sources */,
 				C00084472BAC46C0007ECB71 /* ChatViewController.swift in Sources */,
+				C0CD62BF2BB5D3D700F22D78 /* TabBarController.swift in Sources */,
 				C09377612BAB65A800DD53FB /* RegisterVC.swift in Sources */,
 				C04C54992BB30DFD00904121 /* NewConversationCell.swift in Sources */,
 			);

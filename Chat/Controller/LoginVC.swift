@@ -26,6 +26,7 @@ class LoginVC: UIViewController {
             }
             strongSelf.navigationController?.dismiss(animated: true)
         })
+        btnLogin.viewShadow()
         
     }
     deinit{
@@ -73,6 +74,7 @@ class LoginVC: UIViewController {
     
     @IBAction func btnRegister(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(identifier: "registerStory") as! RegisterVC
+        
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

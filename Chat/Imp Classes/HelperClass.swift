@@ -237,7 +237,7 @@ extension UIViewController: UIPopoverPresentationControllerDelegate{
             string: message ?? "",
             attributes: [
                 .font: UIFont.systemFont(ofSize: 17, weight: .semibold),
-                .foregroundColor: UIColor.ecom_main // Set the desired text color
+                .foregroundColor: UIColor.button // Set the desired text color
             ]
         )
 

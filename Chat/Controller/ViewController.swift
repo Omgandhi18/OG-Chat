@@ -9,6 +9,7 @@ import UIKit
 import FirebaseAuth
 import JGProgressHUD
 import SDWebImage
+import MessageKit
 struct Conversations{
     let id: String
     let name: String
@@ -19,6 +20,7 @@ struct LatestMessage{
     let date: String
     let text: String
     let isRead: Bool
+    let msgType: String
 }
 class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSource{
     
@@ -40,7 +42,11 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
             }
             strongSelf.startListeningforConversation()
         })
+        
 
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationItem.title = "Chats"
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -48,6 +54,9 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         startListeningforConversation()
         
         
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        self.navigationItem.title = ""
     }
     private func startListeningforConversation(){
         guard let email = UserDefaults.standard.string(forKey: "email") else{
@@ -65,13 +74,14 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
                     return
                 }
                 self?.conversations = conversations
-                DispatchQueue.main.async {
-                    self?.tblChats.reloadData()
-                }
+                
             case .failure(let error):
+                self?.conversations = []
                 print("failed to get convos\(error)")
             }
-            
+            DispatchQueue.main.async {
+                self?.tblChats.reloadData()
+            }
         })
     }
     func validateAuth(){
@@ -83,9 +93,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
             present(nav, animated: false)
         }
     }
-    func fetchChats(){
-        
-    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return conversations.count
     }
@@ -94,7 +102,35 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
         let model = conversations[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ConversationsCell
         cell.lblName.text = model.name
-        cell.lblMsg.text = model.latestMessage.text
+        let msgType = model.latestMessage.msgType
+        if msgType == "photo"{
+            cell.lblMsg.isHidden = true
+            cell.imgLogo.isHidden = false
+            cell.lblLogoText.isHidden = false
+            cell.imgLogo.image = UIImage(systemName: "photo")
+            cell.lblLogoText.text = "Photo"
+        }
+        else if msgType == "video"{
+            cell.lblMsg.isHidden = true
+            cell.imgLogo.isHidden = false
+            cell.lblLogoText.isHidden = false
+            cell.imgLogo.image = UIImage(systemName: "video.fill")
+            cell.lblLogoText.text = "Video"
+        }
+        else if msgType == "location"{
+            cell.lblMsg.isHidden = true
+            cell.imgLogo.isHidden = false
+            cell.lblLogoText.isHidden = false
+            cell.imgLogo.image = UIImage(systemName: "location.fill")
+            cell.lblLogoText.text = "Location"
+        }
+       else{
+            cell.lblMsg.isHidden = false
+            cell.imgLogo.isHidden = true
+            cell.lblLogoText.isHidden = true
+            cell.lblMsg.text = model.latestMessage.text
+        }
+        
         let path = "images/\(model.otherUserEmail)_profile_picture.png"
         StorageManager.shared.downloadURL(for: path, completion: {result in
             switch result{
@@ -107,6 +143,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
                 print("Failed to get download URL: \(error)")
             }
         })
+        cell.imgUser.makeViewBorderWithCurve(radius: cell.imgUser.frame.size.height/2,bcolor: .gray,bwidth: 1)
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,7 +154,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
     }
     func openConversation(_ model: Conversations){
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
-        vc.title = model.name
+        vc.otherUserName = model.name
         vc.otherUserEmail = model.otherUserEmail
         vc.conversationID = model.id
         vc.navigationItem.largeTitleDisplayMode = .never
@@ -179,7 +216,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
             switch result{
             case .success(let conversationID):
                 let vc = self?.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
-                vc.title = name
+                vc.otherUserName = name
                 vc.conversationID = conversationID
                 vc.otherUserEmail = email
                 vc.isNewCoversation = false
@@ -187,7 +224,7 @@ class ViewController: UIViewController, UITableViewDelegate,UITableViewDataSourc
                 strongSelf.navigationController?.pushViewController(vc, animated: true)
             case .failure(_):
                 let vc = self?.storyboard?.instantiateViewController(withIdentifier: "chatViewStory") as! ChatViewController
-                vc.title = name
+                vc.otherUserName = name
                 vc.otherUserEmail = email
                 vc.isNewCoversation = true
                 vc.navigationItem.largeTitleDisplayMode = .never

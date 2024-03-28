@@ -23,19 +23,22 @@ final class DatabaseManager{
     }
     public func insertUser(with user: ChatAppUser,completion: @escaping (Bool) -> Void){
         database.child(user.safeEmail).setValue(["user_name" : user.name
-                                                ],withCompletionBlock: {error, _ in
+                                                ],withCompletionBlock: {[weak self] error, _ in
+            guard let strongSelf  = self else{
+                return
+            }
             guard error == nil else{
                 completion(false)
                 return
             }
-            self.database.child("users").observeSingleEvent(of: .value, with: {snapshot in
+            strongSelf.database.child("users").observeSingleEvent(of: .value, with: {snapshot in
                 if var usersCollection = snapshot.value as? [[String:String]]{
                     let newElement = [
                         "name": user.name,
                         "email":user.safeEmail
                     ]
                     usersCollection.append(newElement)
-                    self.database.child("users").setValue(usersCollection,withCompletionBlock: {error, _ in
+                    strongSelf.database.child("users").setValue(usersCollection,withCompletionBlock: {error, _ in
                         guard error == nil else{
                             completion(false)
                             return
@@ -51,7 +54,7 @@ final class DatabaseManager{
                             "email":user.safeEmail
                         ]
                     ]
-                    self.database.child("users").setValue(newCollection,withCompletionBlock: {error, _ in
+                    strongSelf.database.child("users").setValue(newCollection,withCompletionBlock: {error, _ in
                         guard error == nil else{
                             return
                         }
@@ -122,13 +125,22 @@ extension DatabaseManager{
                 break
             case .attributedText(_):
                 break
-            case .photo(_):
+            case .photo(let mediaItem):
+                if let targetUrlString = mediaItem.url?.absoluteString{
+                    message = targetUrlString
+                }
                 break
-            case .video(_):
+            case .video(let mediaItem):
+                if let targetUrlString = mediaItem.url?.absoluteString{
+                    message = targetUrlString
+                }
                 break
-            case .location(_):
+            case .location(let locationData):
+                let location = locationData.location
+                message = "\(location.coordinate.longitude),\(location.coordinate.latitude)"
                 break
-            case .emoji(_):
+            case .emoji(let emoji):
+                message = emoji
                 break
             case .audio(_):
                 break
@@ -147,7 +159,8 @@ extension DatabaseManager{
                 "latest_message": [
                     "date": dateString,
                     "message": message,
-                    "is_read": false
+                    "is_read": false,
+                    "msg_type": firstMesssage.kind.messageKindString
                 ]
             ]
             let reciepientNewConversationData: [String: Any] = [
@@ -157,7 +170,8 @@ extension DatabaseManager{
                 "latest_message": [
                     "date": dateString,
                     "message": message,
-                    "is_read": false
+                    "is_read": false,
+                    "msg_type": firstMesssage.kind.messageKindString
                 ]
             ]
             //update reciepeint conversation entry
@@ -212,13 +226,22 @@ extension DatabaseManager{
             break
         case .attributedText(_):
             break
-        case .photo(_):
+        case .photo(let mediaItem):
+            if let targetUrlString = mediaItem.url?.absoluteString{
+                message = targetUrlString
+            }
             break
-        case .video(_):
+        case .video(let mediaItem):
+            if let targetUrlString = mediaItem.url?.absoluteString{
+                message = targetUrlString
+            }
             break
-        case .location(_):
+        case .location(let locationData):
+            let location = locationData.location
+            message = "\(location.coordinate.longitude),\(location.coordinate.latitude)"
             break
-        case .emoji(_):
+        case .emoji(let emoji):
+            message = emoji
             break
         case .audio(_):
             break
@@ -269,16 +292,17 @@ extension DatabaseManager{
                       let latestMessage = dictionary["latest_message"] as? [String: Any],
                       let date = latestMessage["date"] as? String,
                       let message = latestMessage["message"] as? String,
-                      let isRead = latestMessage["is_read"] as? Bool else{
+                      let isRead = latestMessage["is_read"] as? Bool,
+                      let msgType = latestMessage["msg_type"] as? String else{
                     return nil
                 }
-                let latestMessageObj = LatestMessage(date: date, text: message, isRead: isRead)
+                let latestMessageObj = LatestMessage(date: date, text: message, isRead: isRead,msgType: msgType)
                 return Conversations(id: conversationId, name: name, otherUserEmail: otherUserEmail, latestMessage: latestMessageObj)
             })
             completion(.success(conversationsArray))
         })
     }
-    public func getAllMessagesForConversation(with id: String, completion: @escaping(Result<[Message],Error>) -> Void){
+    public func getAllMessagesForConversation(with id: String, in view: UIView,completion: @escaping(Result<[Message],Error>) -> Void){
         database.child("\(id)/messages").observe(.value, with: {snapshot in
             guard let value = snapshot.value as? [[String:Any]] else{
                 completion(.failure(DatabaseError.failedToFetch))
@@ -302,7 +326,7 @@ extension DatabaseManager{
                         return nil
                     }
                     
-                    let media = Media(url: imageUrl,image: nil,placeholderImage: placeholder, size: CGSize(width: 300, height: 300))
+                    let media = Media(url: imageUrl,image: nil,placeholderImage: placeholder, size: CGSize(width: (view.frame.size.width/2) + 5, height: 100))
                     kind = .photo(media)
                 }
                 else if type == "video"{
@@ -311,7 +335,7 @@ extension DatabaseManager{
                         return nil
                     }
                     
-                    let media = Media(url: videoUrl,image: nil,placeholderImage: placeholder, size: CGSize(width: 300, height: 300))
+                    let media = Media(url: videoUrl,image: nil,placeholderImage: placeholder, size: CGSize(width: (view.frame.size.width/2) + 5, height: 100))
                     kind = .video(media)
                 }
                 else if type == "location"{
@@ -320,9 +344,12 @@ extension DatabaseManager{
                           let latitude = Double(locationComponents[1]) else{
                         return nil
                     }
-                    let location = Location(location: CLLocation(latitude: latitude, longitude: longitude), size:  CGSize(width: 300, height: 300))
+                    let location = Location(location: CLLocation(latitude: latitude, longitude: longitude), size:  CGSize(width: (view.frame.size.width/2) + 5, height: 100))
                     kind = .location(location)
 
+                }
+                else if type == "emoji"{
+                    kind = .emoji(content)
                 }
                 else{
                     kind = .text(content)
@@ -376,7 +403,8 @@ extension DatabaseManager{
                 let location = locationData.location
                 message = "\(location.coordinate.longitude),\(location.coordinate.latitude)"
                 break
-            case .emoji(_):
+            case .emoji(let emoji):
+                message = emoji
                 break
             case .audio(_):
                 break
@@ -414,7 +442,8 @@ extension DatabaseManager{
                     let updatedValue:[String:Any] = [
                         "date": dateString,
                         "message": message,
-                        "is_read": false
+                        "is_read": false,
+                        "msg_type": newMessage.kind.messageKindString
                     ]
                     if var currentUserConversations = snapshot.value as? [[String: Any]]{
                         
@@ -468,7 +497,8 @@ extension DatabaseManager{
                             let updatedValue:[String:Any] = [
                                 "date": dateString,
                                 "message": message,
-                                "is_read": false
+                                "is_read": false,
+                                "msg_type": newMessage.kind.messageKindString
                             ]
                             guard let currentName = UserDefaults.standard.string(forKey: "name") else{
                                 return

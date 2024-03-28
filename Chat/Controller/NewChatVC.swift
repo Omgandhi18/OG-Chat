@@ -23,9 +23,11 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
         searchBar.delegate = self
         title = "New Chat"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark.circle.fill"), style: .done, target: self, action: #selector(dismissSelf))
+        navigationItem.rightBarButtonItem?.tintColor = .button
         tblUsers.delegate = self
         tblUsers.dataSource = self
         searchBar.becomeFirstResponder()
+        loadAllUsers()
         // Do any additional setup after loading the view.
     }
     @objc func dismissSelf(){
@@ -52,6 +54,7 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
                 print("Failed to get download URL: \(error)")
             }
         })
+        cell.imgUser.makeViewBorderWithCurve(radius: cell.imgUser.frame.size.height/2,bcolor: .gray,bwidth: 1)
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -63,6 +66,17 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
         
         
     }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let text = searchBar.text, !text.replacingOccurrences(of: " ", with: "").isEmpty else{
+            loadAllUsers()
+            return
+        }
+        results.removeAll()
+        self.searchUsers(query: text)
+    }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text, !text.replacingOccurrences(of: " ", with: "").isEmpty else{
             return
@@ -71,6 +85,34 @@ class NewChatVC: UIViewController,UITableViewDelegate,UITableViewDataSource, UIS
         results.removeAll()
         spinner.show(in: view)
         self.searchUsers(query: text)
+    }
+    func loadAllUsers(){
+        DatabaseManager.shared.getAllUsers(completion: {[weak self] result in
+            switch result{
+            case .success(let usersCollection):
+                self?.hasFetched = false
+                guard let currentUserEmail = UserDefaults.standard.value(forKey: "email") as? String else{
+                    return
+                }
+                let safeEmail = DatabaseManager.safeEmail(email: currentUserEmail)
+                let otherUsers = usersCollection.filter({
+                    $0["email"] != safeEmail
+                })
+                self?.users = otherUsers
+                let results: [SearchResults] = otherUsers.compactMap({
+                    guard let email = $0["email"], let name = $0["name"] else{
+                        return nil
+                    }
+                    return SearchResults(name: name, email: email)
+                })
+                self?.results = results
+                self?.updateUI()
+                
+            
+            case .failure(let error):
+                print("Failed to get users: \(error)")
+            }
+        })
     }
     func searchUsers(query: String){
         if hasFetched{

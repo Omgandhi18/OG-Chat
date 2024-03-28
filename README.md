@@ -1,5 +1,5 @@
+![OG Chat logo](https://github.com/Omgandhi18/OG-Chat/assets/81526761/60ff62c7-4b58-4844-9a06-9e0e11f5c45c)
 # OG-Chat
-
 OG Chat is a chat application developed using MessagKit for the frontend and Firebase as the backend service. It provides users with a seamless messaging experience and incorporates modern features for enhanced communication.
 
 ## Features
